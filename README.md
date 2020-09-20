@@ -138,7 +138,7 @@ model.py 就是构建yolo3的主要模块文件，这里一共有14个函数/
 utils.py 是在模型训练时进行数据处理的工具文件，一共有3个函数：
 
 *_annoataion.py 对数据进行转换的文件，把原始的文件转换为txt文件
-kmeans.py 输入上面得到的txt文件，通过聚类得到数据最佳anchors
+kmeanstoanchor.py 输入上面得到的txt文件，通过聚类得到数据最佳anchors
 convert.py 把原始权重转换为kares的能读取的原始h5文件
 
 yolov3.cfg 构建yolov3检测模型的整个超参文件
