@@ -46,7 +46,7 @@ def _main():
     input_shape = (96, 96)  # 32的倍数，输入图像
 
     model = create_model(input_shape, anchors, num_classes,
-                         freeze_body=1,  # 冻结模式，1是冻结DarkNet53的层，2是冻结全部，只保留最后3层；实际用2训练结果检测不佳，改为1
+                         freeze_body=2,  # 冻结模式，1是冻结DarkNet53的层，2是冻结全部，只保留最后3层
                          weights_path=pretrained_path)  # make sure you know what you freeze
 
     logging = TensorBoard(log_dir=log_dir)
