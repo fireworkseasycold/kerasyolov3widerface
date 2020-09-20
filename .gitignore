@@ -111,5 +111,12 @@ venv.bak/
 # mydata
 model_data/
 dataset/
+#训练日志
 logs/
+#权重文件
 configs/yolov3.h5
+#我的学习
+study/
+yolo3cfg文件说明
+make9anchors.py
+makeyololabeltxt.py

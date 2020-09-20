@@ -20,6 +20,7 @@ from yolo3.utils import get_random_data
 
 
 def _main():
+    """加_是个受保护的名字，该名字不会被星号匹配，必须单独import"""
     import os
     os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     from keras import backend as K
@@ -34,18 +35,18 @@ def _main():
     log_dir = 'logs/widerface'  # 日志文件夹
 
     # pretrained_path = 'model_data/yolo_weights.h5'  # 预训练模型
-    pretrained_path = 'configs/yolov3.h5'  # 预训练模型可以通过convert.py将yolov3.weights转成h5,我放configs下了，or =False
-    anchors_path = 'configs/yolo_anchors.txt'  # anchors
+    pretrained_path = 'configs/yolov3.h5'  # 预训练模型可以通过convert.py将yolov3.weights转成h5，or =False
+    anchors_path = 'configs/yolo_wider_anchors.txt'  # anchors
 
     class_names = get_classes(classes_path)  # 类别列表
     num_classes = len(class_names)  # 类别数
     anchors = get_anchors(anchors_path)  # anchors列表
 
     # input_shape = (416, 416)  # 32的倍数，输入图像
-    input_shape = (64, 64)  # 32的倍数，输入图像
+    input_shape = (96, 96)  # 32的倍数，输入图像
 
     model = create_model(input_shape, anchors, num_classes,
-                         freeze_body=2, #冻结模式，1是冻结DarkNet53的层，2是冻结全部，只保留最后3层；
+                         freeze_body=1,  # 冻结模式，1是冻结DarkNet53的层，2是冻结全部，只保留最后3层；实际用2训练结果检测不佳，改为1
                          weights_path=pretrained_path)  # make sure you know what you freeze
 
     logging = TensorBoard(log_dir=log_dir)
@@ -58,8 +59,8 @@ def _main():
     val_split = 0.1  # 训练和验证的比例
     with open(annotation_path) as f:
         lines = f.readlines()
-    np.random.seed(47)
-    np.random.shuffle(lines)
+    np.random.seed(47)  # 设置相同的seed，则每次生成的随机数也相同，如果不设置seed，则每次生成的随机数都会不一样
+    np.random.shuffle(lines)  # 随机打散
     np.random.seed(None)
     num_val = int(len(lines) * val_split)  # 验证集数量
     num_train = len(lines) - num_val  # 训练集数量
@@ -88,6 +89,7 @@ def _main():
         model.save_weights(log_dir + 'trained_weights_stage_1.h5')  # 存储最终的参数，再训练过程中，通过回调存储
 
     if True:  # 全部训练
+        print("加载预训练模型参数")
         for i in range(len(model.layers)):
             model.layers[i].trainable = True
 
@@ -125,8 +127,20 @@ def get_anchors(anchors_path):
     return np.array(anchors).reshape(-1, 2)
 
 
-def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze_body=2,
+def create_model(input_shape,
+                 anchors,
+                 num_classes,
+                 load_pretrained=True,
+                 freeze_body=2,
                  weights_path='model_data/yolo_weights.h5'):
+    """
+    创建模型
+    input_shape：图片尺寸；
+    anchors：9个anchor box；
+    num_classes：类别数；
+    freeze_body：冻结模式，1是冻结DarkNet53的层，2是冻结全部，只保留最后3层；
+    weights_path：预训练模型的权重。
+    """
     K.clear_session()  # 清除session
     h, w = input_shape  # 尺寸
     image_input = Input(shape=(w, h, 3))  # 图片输入格式

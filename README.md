@@ -60,14 +60,16 @@ conda install matplotlib
 
 graphviz==0.8.4和pydot==1.2.4我没装，所以我把yolov3_train.py里plot_model这一行注释了，这是keras的可视化
 
-sklearn,seaborn根据需要自己装，训练用不上
+sklearn,seaborn根据需要自己装，pip install scikit-learn seaborn -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+
 
 ##训练：
 数据：根据标注图片用wider_annotation.py生成需要的configs/WIDER_train.txt，我这里提供了
 
 你的类别wider_classes.txt
 
-yolo_anchors.txt我这没改，你可以用kmeans.py改
+yolo_anchors.txt,你可以用根据数据生成自己的anchors
 
 预训练模型可以加载也可改成False,可使用官方yolov3.h5(由yolov3.weights转生成,自己百度个脚本，200多兆)，或者上个结点
 
@@ -129,3 +131,14 @@ git忽略项
 2、输入 touch .gitignore ，生成“.gitignore”文件。
 
 3、在”.gitignore” 文件里输入你要忽略的文件夹及其文件就可以了。（注意格式）
+
+文件说明：
+yolo3文件夹下：
+model.py 就是构建yolo3的主要模块文件，这里一共有14个函数/
+utils.py 是在模型训练时进行数据处理的工具文件，一共有3个函数：
+
+*_annoataion.py 对数据进行转换的文件，把原始的文件转换为txt文件
+kmeans.py 输入上面得到的txt文件，通过聚类得到数据最佳anchors
+convert.py 把原始权重转换为kares的能读取的原始h5文件
+
+yolov3.cfg 构建yolov3检测模型的整个超参文件

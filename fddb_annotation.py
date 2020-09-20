@@ -3,6 +3,7 @@
 """
 Copyright (c) 2018. All rights reserved.
 Created by C. L. Wang on 2018/7/10
+fddb数据集转转成yolov3所需训练数据标签txt
 """
 import os
 

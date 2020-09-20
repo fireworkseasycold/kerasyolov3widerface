@@ -20,6 +20,8 @@ from keras.layers import Input
 from yolo3.model import yolo_eval, yolo_body
 from yolo3.utils import letterbox_image
 
+import cv2
+
 
 class YOLO(object):
     def __init__(self):
@@ -197,20 +199,24 @@ class YOLO(object):
 
 def detect_img_for_test():
     yolo = YOLO()
-    img_path = './test/by.jpg'
+    img_path = './test/1.jpg'
     image = Image.open(img_path)
+    # image=image.resize((416, 416), Image.ANTIALIAS)
     r_image = yolo.detect_image(image)
     yolo.close_session()
-    r_image.save('xxx.png')
+    r_image.save('./test/1r.jpg')
 
 
 def test_of_detect_objects_of_image():
     yolo = YOLO()
     img_path = './test/by.jpg'
+    img_test=cv2.imread(img_path)
+    cv2.imshow('img_test',img_test)
+    cv2.waitKey(200)
     objects_line = yolo.detect_objects_of_image(img_path)
     print(objects_line)
 
 
 if __name__ == '__main__':
-    # detect_img_for_test()
-    test_of_detect_objects_of_image()
+    detect_img_for_test()
+    # test_of_detect_objects_of_image()

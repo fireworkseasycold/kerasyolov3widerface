@@ -20,12 +20,12 @@ def draw_img(image, boxes):
         cv2.rectangle(img, pt1=i1_pt1, pt2=i1_pt2, thickness=3, color=(255, 0, 255))
 
     cv2.imshow('Image', img)
-    cv2.imwrite('./data/img_346.bbox.jpg', img)
+    cv2.imwrite('./test/1.bbox.jpg', img)
     cv2.waitKey(0)
 
 
 if __name__ == '__main__':
-    img_path = os.path.join(ROOT_DIR, 'dataset', 'originalPics', '2002/08/22/big/img_734.jpg')
+    img_path = os.path.join(ROOT_DIR, 'test', '1.jpg')
     print(img_path)
     boxes = [(87, 0, 229, 215), (149, 263, 163, 283), (178, 260, 192, 282), (205, 270, 220, 291)]
     draw_img(img_path, boxes)
