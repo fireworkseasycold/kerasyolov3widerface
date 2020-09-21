@@ -71,7 +71,7 @@ def _main():
     直接将loss设置为y_pred（因为模型的输出就是loss，所以y_pred就是loss），
     无视y_true，训练的时候，y_true随便扔一个符合形状的数组进去就行了。
     """
-    if False:
+    if False: #冻结
         model.compile(optimizer=Adam(lr=1e-3), loss={
             # 使用定制的 yolo_loss Lambda层
             'yolo_loss': lambda y_true, y_pred: y_pred})  # 损失函数
@@ -89,7 +89,6 @@ def _main():
         model.save_weights(log_dir + 'trained_weights_stage_1.h5')  # 存储最终的参数，再训练过程中，通过回调存储
 
     if True:  # 全部训练
-        print("加载预训练模型参数")
         for i in range(len(model.layers)):
             model.layers[i].trainable = True
 
